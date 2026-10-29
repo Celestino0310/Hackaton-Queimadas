@@ -1,1 +1,0 @@
-"""INPE ingestion pipeline."""
