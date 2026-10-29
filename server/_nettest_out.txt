@@ -1,0 +1,12 @@
+regioes=200 n=5
+estados=200 n=27
+municipios_SP=200 n=645
+ocorrencias_uf=200 total=402500 itens=27
+top_uf=MT nome=Mato Grosso regiao=Centro-Oeste focos=72000
+ocorrencias_regiao=200 itens=5
+  regiao Norte = 171500
+  regiao Centro-Oeste = 110900
+  regiao Nordeste = 75000
+  regiao Sudeste = 32600
+  regiao Sul = 12500
+filtro_regiao_Norte itens=7

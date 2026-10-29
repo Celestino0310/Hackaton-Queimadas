@@ -1,0 +1,48 @@
+services:
+  database:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: queimalerta
+      POSTGRES_USER: queimalerta
+      POSTGRES_PASSWORD: local-development-only
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U queimalerta -d queimalerta"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  dashboard:
+    build: .
+    environment:
+      QUEIMALERTA_DATABASE_URL: postgresql+psycopg://queimalerta:local-development-only@database:5432/queimalerta
+      QUEIMALERTA_HOST: 0.0.0.0
+      QUEIMALERTA_PORT: 8050
+      QUEIMALERTA_ARCHIVE_DIR: /app/data/raw
+    ports:
+      - "8050:8050"
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - raw-data:/app/data/raw
+
+  ingestion:
+    build: .
+    profiles: ["jobs"]
+    command: ["queimalerta", "ingest", "--days", "1"]
+    environment:
+      QUEIMALERTA_DATABASE_URL: postgresql+psycopg://queimalerta:local-development-only@database:5432/queimalerta
+      QUEIMALERTA_ARCHIVE_DIR: /app/data/raw
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - raw-data:/app/data/raw
+
+volumes:
+  postgres-data:
+  raw-data:
