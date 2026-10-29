@@ -1,117 +1,110 @@
-# QueimAlerta Brasil
+QueimAlerta Brasil
 
-Interactive Python dashboard for monitoring near-real-time active-fire detections in Brazil.
+Painel interativo em Python para monitoramento quase em tempo real de detecções de focos de calor ativos no Brasil.
 
-> A satellite hotspot is not automatically a confirmed wildfire. The feed can include controlled burns, agricultural fires, other heat sources, and false positives.
+Um foco de calor detectado por satélite não é automaticamente um incêndio florestal confirmado. Os dados podem incluir queimadas controladas, incêndios agrícolas, outras fontes de calor e falsos positivos.
+Recursos atuais
+Importa o arquivo CSV diário oficial do INPE para o Brasil e arquiva cada cópia baixada.
+Valida as coordenadas e os campos obrigatórios da fonte.
+Elimina registros duplicados com base no id estável do INPE.
+Armazena as detecções e as execuções de ingestão em SQLite localmente ou PostgreSQL em contêineres.
+Exibe um mapa interativo do Plotly, séries temporais, classificação por estado, filtros e uma tabela de registros recentes.
+Atualiza o painel do navegador a cada 60 segundos.
+Exibe a atualização mais recente da fonte e o status do pipeline.
+Disponibiliza endpoints separados de disponibilidade do processo, prontidão e integridade dos dados.
+Emite logs estruturados de ingestão em JSON, adequados para coleta pelo CloudWatch.
 
-## Current capabilities
+O roteiro detalhado está em PROJECT_PLAN.md.
 
-- Imports the official INPE Brazil daily CSV feed and archives every downloaded snapshot.
-- Validates coordinates and required source fields.
-- Deduplicates records by the stable INPE `id`.
-- Stores detections and ingestion runs in SQLite locally or PostgreSQL in containers.
-- Displays an interactive Plotly map, time series, state ranking, filters, and recent-record table.
-- Refreshes the browser dashboard every 60 seconds.
-- Shows source freshness and pipeline status.
-- Exposes separate liveness, readiness, and data-health endpoints.
-- Emits structured JSON ingestion logs suitable for CloudWatch collection.
+Fonte de dados
 
-The detailed roadmap is in [`PROJECT_PLAN.md`](PROJECT_PLAN.md).
+A fonte principal é o portal de dados abertos do Programa Queimadas do INPE. O adaptador atual lê arquivos CSV diários do Brasil no servidor oficial de dados do INPE. Esses arquivos são atualizados ao longo do dia e contêm IDs da fonte, horário de observação em GMT, coordenadas, satélite, município, estado, identificadores do IBGE, bioma, campos meteorológicos e de risco de incêndio, além de FRP quando disponível.
 
-## Data source
+O conteúdo que descreve fontes externas foi reformulado para cumprir as restrições de licenciamento.
 
-The primary source is the [INPE Programa Queimadas open-data portal](https://terrabrasilis.dpi.inpe.br/queimadas/portal/dados-abertos/). The current adapter reads Brazil daily CSV files from the official INPE data server. Those files are updated during the day and contain source IDs, GMT observation time, coordinates, satellite, municipality, state, IBGE identifiers, biome, weather/fire-risk fields, and FRP when available.
+Executar localmente com Python
 
-Content describing external sources was rephrased for compliance with licensing restrictions.
+É necessário ter o Python 3.12 ou superior. No PowerShell, execute o inicializador do Windows:
 
-## Run locally with Python
-
-Python 3.12 or newer is required. From PowerShell, run the Windows launcher:
-
-```powershell
+powershell
 .\run-local.cmd
-```
 
-The launcher creates `.venv` when needed, installs the project, initializes the local SQLite database, refreshes the latest INPE file, prints pipeline status, and starts the dashboard. Keep the terminal open while using it, then open <http://127.0.0.1:8050>. Press `Ctrl+C` to stop it.
 
-Useful launcher options:
+O inicializador cria .venv quando necessário, instala o projeto, inicializa o banco de dados SQLite local, atualiza o arquivo mais recente do INPE, exibe o status do pipeline e inicia o painel. Mantenha o terminal aberto enquanto estiver usando o sistema e, em seguida, abra http://127.0.0.1:8050. Pressione Ctrl+C para interrompê-lo.
 
-```powershell
-# Start immediately from already downloaded data
+Opções úteis do inicializador:
+
+powershell
+# Iniciar imediatamente com os dados já baixados
 .\run-local.cmd --skip-ingest
 
-# Download the latest seven daily files before starting
+# Baixar os sete arquivos diários mais recentes antes de iniciar
 .\run-local.cmd --days 7
 
-# Prepare and validate everything without starting the web server
+# Preparar e validar tudo sem iniciar o servidor web
 .\run-local.cmd --prepare-only
-```
 
-`run-local.ps1` provides the same workflow when PowerShell script execution is enabled. The `.cmd` launcher is the default because it does not require changing your execution policy.
 
-You can also use the individual Python commands:
+O run-local.ps1 oferece o mesmo fluxo de trabalho quando a execução de scripts do PowerShell está habilitada. O inicializador .cmd é o padrão porque não exige alterações na política de execução.
 
-```powershell
+Você também pode usar os comandos individuais do Python:
+
+powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e ".[dev]"
 .\.venv\Scripts\python.exe -m queimalerta.cli init-db
 .\.venv\Scripts\python.exe -m queimalerta.cli ingest --days 1
 .\.venv\Scripts\python.exe -m queimalerta.dashboard.app
-```
 
-The source files can be large. Start with one day when checking a new setup.
 
-## Run with Docker Compose
+Os arquivos de origem podem ser grandes. Comece com um dia ao testar uma nova configuração.
 
-Docker is not required for direct Python execution. When Docker is available:
+Executar com Docker Compose
 
-```powershell
+O Docker não é necessário para executar o projeto diretamente com Python. Quando o Docker estiver disponível:
+
+powershell
 docker compose up --build database dashboard
 docker compose --profile jobs run --rm ingestion
-```
 
-The Compose stack uses PostgreSQL/PostGIS. The current first slice stores coordinates in indexed numeric columns and remains compatible with SQLite; native PostGIS geometry and viewport queries are scheduled in the next implementation phase.
 
-## Configuration
+A pilha do Compose utiliza PostgreSQL/PostGIS. Nesta primeira etapa, o sistema armazena as coordenadas em colunas numéricas indexadas e continua compatível com SQLite; a geometria nativa do PostGIS e as consultas por área visível do mapa estão previstas para a próxima fase de implementação.
 
-Copy `.env.example` to `.env` and change values as needed. Environment variables override defaults.
+Configuração
 
-| Variable | Default | Purpose |
-|---|---|---|
-| `QUEIMALERTA_DATABASE_URL` | `sqlite:///data/queimalerta.db` | SQLAlchemy database URL |
-| `QUEIMALERTA_INPE_DAILY_URL` | official INPE Brazil daily directory | Source directory |
-| `QUEIMALERTA_ARCHIVE_DIR` | `data/raw` | Raw snapshot archive |
-| `QUEIMALERTA_REFRESH_SECONDS` | `60` | Browser refresh interval |
-| `QUEIMALERTA_STALE_AFTER_MINUTES` | `30` | Stale-ingestion threshold |
-| `QUEIMALERTA_MAX_MAP_POINTS` | `5000` | Maximum points sent to map |
-| `QUEIMALERTA_HOST` | `127.0.0.1` | Web bind address |
-| `QUEIMALERTA_PORT` | `8050` | Web port |
-| `QUEIMALERTA_DEBUG` | `false` | Dash development mode |
-| `QUEIMALERTA_LOG_LEVEL` | `INFO` | Application log level |
+Copie .env.example para .env e altere os valores conforme necessário. As variáveis de ambiente substituem os valores padrão.
 
-Do not commit `.env` or credentials.
+Variável	Padrão	Finalidade
+QUEIMALERTA_DATABASE_URL	sqlite:///data/queimalerta.db	URL de conexão com o banco de dados SQLAlchemy
+QUEIMALERTA_INPE_DAILY_URL	diretório oficial de dados diários do INPE para o Brasil	Diretório de origem
+QUEIMALERTA_ARCHIVE_DIR	data/raw	Diretório de arquivamento dos dados brutos
+QUEIMALERTA_REFRESH_SECONDS	60	Intervalo de atualização do navegador, em segundos
+QUEIMALERTA_STALE_AFTER_MINUTES	30	Limite, em minutos, para considerar a ingestão desatualizada
+QUEIMALERTA_MAX_MAP_POINTS	5000	Número máximo de pontos enviados ao mapa
+QUEIMALERTA_HOST	127.0.0.1	Endereço de vinculação do servidor web
+QUEIMALERTA_PORT	8050	Porta do servidor web
+QUEIMALERTA_DEBUG	false	Modo de desenvolvimento do Dash
+QUEIMALERTA_LOG_LEVEL	INFO	Nível de log da aplicação
 
-## Commands
+Não faça commit do arquivo .env nem de credenciais.
 
-```powershell
+Comandos
+powershell
 queimalerta init-db
 queimalerta ingest --days 1
 queimalerta status
 queimalerta-dashboard
-```
 
-In AWS, EventBridge Scheduler should invoke the ingestion container every 10 minutes. Do not embed a scheduler in the dashboard process because multiple web replicas would duplicate jobs.
 
-## Health endpoints
+Na AWS, o EventBridge Scheduler deve executar o contêiner de ingestão a cada 10 minutos. Não incorpore um agendador ao processo do painel, pois várias réplicas web duplicariam as execuções dos trabalhos.
 
-- `GET /health/live`: confirms that the web process is running.
-- `GET /health/ready`: checks database connectivity.
-- `GET /health/data`: reports ingestion/data freshness and returns HTTP 503 when stale.
-
-## Known first-slice limits
-
-- AWS CDK infrastructure and CloudWatch alarms are not implemented yet.
-- Coordinates are not yet stored as native PostGIS geometry.
-- Municipality filtering and map viewport queries are planned next.
-- The current dashboard retrieves at most 50,000 filtered rows for charts and 5,000 for map rendering.
-- There is no authentication; do not expose this development build as an administrative interface.
+Endpoints de integridade
+GET /health/live: confirma que o processo web está em execução.
+GET /health/ready: verifica a conectividade com o banco de dados.
+GET /health/data: informa a atualização dos dados e da ingestão e retorna HTTP 503 quando os dados estão desatualizados.
+Limitações conhecidas da primeira etapa
+A infraestrutura do AWS CDK e os alarmes do CloudWatch ainda não foram implementados.
+As coordenadas ainda não são armazenadas como geometria nativa do PostGIS.
+O filtro por município e as consultas pela área visível do mapa estão planejados para a próxima etapa.
+O painel atual recupera no máximo 50.000 linhas filtradas para os gráficos e 5.000 para a renderização do mapa.
+Não há autenticação; não exponha esta versão de desenvolvimento como uma interface administrativa.
