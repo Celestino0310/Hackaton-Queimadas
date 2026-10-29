@@ -1,0 +1,13 @@
+# Runtime dependencies pinned to the versions validated for local and Vercel deployment.
+dash==2.18.2
+Flask==3.0.3
+numpy==2.2.6
+pandas==2.2.3
+plotly==5.24.1
+requests==2.34.2
+SQLAlchemy==2.1.6
+psycopg[binary]==3.3.6
+tzdata==2026.6
+
+# Install the QueimAlerta package from this repository's src/ layout.
+.

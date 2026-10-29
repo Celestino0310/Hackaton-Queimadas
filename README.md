@@ -4,6 +4,8 @@ Painel interativo em Python para monitoramento quase em tempo real de detecçõe
 
 Um foco de calor detectado por satélite não é automaticamente um incêndio florestal confirmado. Os dados podem incluir queimadas controladas, incêndios agrícolas, outras fontes de calor e falsos positivos.
 
+Link Site: https://hackatonqueimadas.vercel.app
+
 ## Recursos atuais
 
 - Importa o arquivo CSV diário oficial do INPE para o Brasil e arquiva cada cópia baixada.

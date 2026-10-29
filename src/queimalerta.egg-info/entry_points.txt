@@ -1,0 +1,3 @@
+[console_scripts]
+queimalerta = queimalerta.cli:main
+queimalerta-dashboard = queimalerta.dashboard.app:main

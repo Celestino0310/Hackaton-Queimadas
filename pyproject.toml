@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "queimalerta"
+version = "0.1.0"
+description = "Near-real-time active-fire monitoring dashboard for Brazil"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "dash>=2.18,<3",
+  "Flask>=3.0,<3.1",
+  "numpy>=2.0,<2.3",
+  "pandas>=2.2.3,<2.3",
+  "plotly>=5.24,<6",
+  "requests>=2.32,<3",
+  "SQLAlchemy>=2.0,<3",
+  "psycopg[binary]>=3.2,<4",
+  "tzdata>=2025.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "ruff>=0.11,<1",
+]
+
+[project.scripts]
+queimalerta = "queimalerta.cli:main"
+queimalerta-dashboard = "queimalerta.dashboard.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"queimalerta.dashboard" = ["assets/*.css"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

@@ -1,0 +1,18 @@
+IMPORT_OK
+routes=10
+/
+/<path:filename>
+/api/estados
+/api/municipios
+/api/ocorrencias
+/api/regioes
+/api/reports
+/api/reports
+/api/reports/<report_id>
+/health
+default_occurrences=27
+health=200
+create_report=201
+list_reports=200 count=1
+delete_report=200
+invalid_report=400
