@@ -6,6 +6,10 @@ Um foco de calor detectado por satélite não é automaticamente um incêndio fl
 
 Link Site: https://hackatonqueimadas.vercel.app
 
+
+https://github.com/user-attachments/assets/ce0e442b-ad6c-42b7-8894-5d25489c3ebe
+
+
 ## Recursos atuais
 
 - Importa o arquivo CSV diário oficial do INPE para o Brasil e arquiva cada cópia baixada.
