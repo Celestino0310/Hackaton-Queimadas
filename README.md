@@ -1,4 +1,4 @@
-QueimAlerta Brasil
+#QueimAlerta Brasil
 
 Painel interativo em Python para monitoramento quase em tempo real de detecções de focos de calor ativos no Brasil.
 
