@@ -1,0 +1,12 @@
+{
+  "appId": "br.queimalerta.app",
+  "appName": "QueimAlerta",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

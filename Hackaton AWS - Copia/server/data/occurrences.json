@@ -1,0 +1,137 @@
+[
+  {
+    "uf": "AC",
+    "municipio": null,
+    "focos": 8500
+  },
+  {
+    "uf": "AL",
+    "municipio": null,
+    "focos": 1200
+  },
+  {
+    "uf": "AP",
+    "municipio": null,
+    "focos": 2600
+  },
+  {
+    "uf": "AM",
+    "municipio": null,
+    "focos": 38000
+  },
+  {
+    "uf": "BA",
+    "municipio": null,
+    "focos": 18000
+  },
+  {
+    "uf": "CE",
+    "municipio": null,
+    "focos": 4200
+  },
+  {
+    "uf": "DF",
+    "municipio": null,
+    "focos": 900
+  },
+  {
+    "uf": "ES",
+    "municipio": null,
+    "focos": 1100
+  },
+  {
+    "uf": "GO",
+    "municipio": null,
+    "focos": 15000
+  },
+  {
+    "uf": "MA",
+    "municipio": null,
+    "focos": 29000
+  },
+  {
+    "uf": "MT",
+    "municipio": null,
+    "focos": 72000
+  },
+  {
+    "uf": "MS",
+    "municipio": null,
+    "focos": 23000
+  },
+  {
+    "uf": "MG",
+    "municipio": null,
+    "focos": 19000
+  },
+  {
+    "uf": "PA",
+    "municipio": null,
+    "focos": 68000
+  },
+  {
+    "uf": "PB",
+    "municipio": null,
+    "focos": 2300
+  },
+  {
+    "uf": "PR",
+    "municipio": null,
+    "focos": 5600
+  },
+  {
+    "uf": "PE",
+    "municipio": null,
+    "focos": 3800
+  },
+  {
+    "uf": "PI",
+    "municipio": null,
+    "focos": 14000
+  },
+  {
+    "uf": "RJ",
+    "municipio": null,
+    "focos": 1500
+  },
+  {
+    "uf": "RN",
+    "municipio": null,
+    "focos": 1800
+  },
+  {
+    "uf": "RS",
+    "municipio": null,
+    "focos": 4800
+  },
+  {
+    "uf": "RO",
+    "municipio": null,
+    "focos": 21000
+  },
+  {
+    "uf": "RR",
+    "municipio": null,
+    "focos": 7400
+  },
+  {
+    "uf": "SC",
+    "municipio": null,
+    "focos": 2100
+  },
+  {
+    "uf": "SP",
+    "municipio": null,
+    "focos": 11000
+  },
+  {
+    "uf": "SE",
+    "municipio": null,
+    "focos": 700
+  },
+  {
+    "uf": "TO",
+    "municipio": null,
+    "focos": 26000
+  }
+]
