@@ -1,5 +1,0 @@
-/ -> 200 len=7237
-/manifest.webmanifest -> 200 len=797
-/sw.js -> 200 len=1514
-/icons/icon-192.png -> 200 len=6626
-/health -> 200 len=67
